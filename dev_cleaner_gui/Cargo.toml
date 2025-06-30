@@ -4,3 +4,10 @@ version.workspace = true
 edition.workspace = true
 
 [dependencies]
+iced = { version = "0.13.1", features = [
+    "tokio",
+    "image",
+    "svg",
+    "canvas",
+    "advanced",
+] }
