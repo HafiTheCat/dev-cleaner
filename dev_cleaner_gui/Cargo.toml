@@ -1,0 +1,6 @@
+[package]
+name = "dev_cleaner_gui"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]

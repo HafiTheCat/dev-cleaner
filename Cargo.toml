@@ -1,0 +1,14 @@
+[workspace]
+members = [
+    "dev_cleaner",
+    "dev_cleaner_core",
+    "dev_cleaner_cli",
+    "dev_cleaner_gui",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+
+[workspace.dependencies]
