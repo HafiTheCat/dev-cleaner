@@ -6,11 +6,14 @@ use std::path::PathBuf;
 use dev_cleaner_core::config::{self, Config};
 
 #[derive(Debug, Parser)]
-#[clap(author, version, about, long_about = None)]
+#[clap(author, version, about, long_about = None,
+    args_conflicts_with_subcommands = true,
+    subcommand_precedence_over_arg = true
+)]
 pub struct DevCleanerCli {
     /// Optional path argument
     #[arg(value_hint = clap::ValueHint::DirPath)]
-    #[arg(short, long, default_value = None)]
+    #[arg(short, long, conflicts_with = "gui", default_value = None)]
     pub path: Option<PathBuf>,
 
     /// Set log level (e.g., DEBUG, INFO, WARN, ERROR)
@@ -18,7 +21,8 @@ pub struct DevCleanerCli {
     pub log_level: LevelFilter,
 
     /// Run in GUI mode
-    #[arg(long, conflicts_with = "command", default_value = "false")]
+    #[arg(long, default_value = "false")]
+    #[arg(conflicts_with = "path")]
     pub gui: bool,
 
     #[command(subcommand)]
@@ -28,7 +32,7 @@ pub struct DevCleanerCli {
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     /// Manage configuration
-    #[command(alias = "c", visible_alias = "c")]
+    #[command(visible_aliases = ["c", "cfg"])]
     Config {
         #[command(subcommand)]
         command: Option<ConfigCommands>,
@@ -37,13 +41,13 @@ pub enum Commands {
 #[derive(Debug, Subcommand)]
 pub enum ConfigCommands {
     /// Folder patterns
-    #[command(alias = "f", visible_alias = "f")]
+    #[command(visible_alias = "f")]
     Filters {
         #[command(subcommand)]
         command: Option<FilterCommands>,
     },
     /// List all folder patterns
-    #[command(alias = "ls", visible_alias = "ls")]
+    #[command(visible_alias = "ls")]
     List,
     /// Reset all folder patterns
     Reset,
@@ -52,13 +56,13 @@ pub enum ConfigCommands {
 #[derive(Debug, Subcommand)]
 pub enum FilterCommands {
     /// Add a folder pattern
-    #[command(alias = "+", visible_alias = "+")]
+    #[command(visible_alias = "+")]
     Add { pattern: String },
     /// Remove a folder pattern
-    #[command(aliases = ["rm", "-"], visible_aliases = ["rm", "-"])]
+    #[command(visible_aliases = ["rm", "-"])]
     Remove { pattern: String },
     /// List all folder patterns
-    #[command(alias = "ls", visible_alias = "ls")]
+    #[command(visible_alias = "ls")]
     List,
     /// Reset all folder patterns
     Reset,
