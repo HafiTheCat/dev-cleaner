@@ -4,6 +4,7 @@ use std::path::PathBuf;
 
 use app::App;
 
+#[allow(dead_code)]
 pub struct DevCleanerGui {
     path: Option<PathBuf>,
     size: (f32, f32),
