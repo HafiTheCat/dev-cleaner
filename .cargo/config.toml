@@ -1,3 +1,0 @@
-[build]
-# OPTIONAL Use sccache for faster builds <cargo {install,binstall} sccache>
-rustc-wrapper = "sccache"
