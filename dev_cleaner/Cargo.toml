@@ -6,8 +6,11 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
-log.workspace = true
-env_logger = "0.11.8"
-
+dev_cleaner_core = { path = "../dev_cleaner_core" }
 dev_cleaner_cli = { path = "../dev_cleaner_cli" }
 dev_cleaner_gui = { path = "../dev_cleaner_gui" }
+
+tokio = { version = "1.45.1", features = ["full"] }
+env_logger = "0.11.8"
+
+log.workspace = true

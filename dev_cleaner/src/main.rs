@@ -1,17 +1,21 @@
-use dev_cleaner_cli::{Commands, DevCleanerCli};
+use dev_cleaner_cli::DevCleanerCli;
+use dev_cleaner_core::config;
 use dev_cleaner_gui::DevCleanerGui;
-use log::info;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = DevCleanerCli::parse_args();
 
     setup_logger(cli.log_level)?;
 
-    cli.process()?;
+    let mut config = config::Config::load().unwrap_or_default();
 
+    
     if cli.gui {
-        DevCleanerGui::new(cli.path).run()?
+        DevCleanerGui::new(cli.path.clone()).run()?
     }
+
+    cli.process(&mut config)?;
+    
 
     Ok(())
 }
