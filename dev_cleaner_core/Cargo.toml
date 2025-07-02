@@ -6,3 +6,6 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+serde = { version = "1.0.188", features = ["derive"] }
+confy = "1.0.0"
+owo-colors.workspace = true
