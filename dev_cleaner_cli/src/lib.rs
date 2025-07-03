@@ -173,16 +173,12 @@ impl FilterCommands {
             FilterCommands::Add { pattern } => {
                 debug!("Adding pattern: {pattern}");
                 config.filters.push(pattern.clone());
-                config
-                    .store()
-                    .map_err(|e| std::io::Error::other(e.to_string()))?;
+                config.store()?;
             }
             FilterCommands::Remove { pattern } => {
                 debug!("Removing pattern: {pattern}");
                 config.filters.retain(|p| p != pattern);
-                config
-                    .store()
-                    .map_err(|e| std::io::Error::other(e.to_string()))?;
+                config.store()?;
             }
             FilterCommands::List => {
                 debug!("Listing patterns");
@@ -192,9 +188,7 @@ impl FilterCommands {
             FilterCommands::Reset => {
                 debug!("Resetting patterns");
                 config.filters = Config::default().filters;
-                config
-                    .store()
-                    .map_err(|e| std::io::Error::other(e.to_string()))?;
+                config.store()?;
             }
         }
         Ok(())
