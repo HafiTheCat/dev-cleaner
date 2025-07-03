@@ -160,7 +160,13 @@ impl ConfigCommands {
                 println!("{}", &config);
             }
             ConfigCommands::Reset => {
-                println!("Resetting all folder patterns");
+                println!("Do you want to reset the configuration? [y/N]");
+                let mut buf = String::new();
+                std::io::stdin().read_line(&mut buf)?;
+                if buf.trim().to_lowercase() == "y" {
+                    *config = Config::default();
+                    config.store()?;
+                }
             }
         }
         Ok(())
