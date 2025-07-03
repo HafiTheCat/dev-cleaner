@@ -138,7 +138,7 @@ impl Commands {
                 if let Some(cmd) = command {
                     cmd.process(config)?;
                 } else {
-                    println!("No config command provided.");
+                    ConfigCommands::List.process(config)?;
                 }
             }
         }
