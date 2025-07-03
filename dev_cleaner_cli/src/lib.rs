@@ -193,8 +193,13 @@ impl FilterCommands {
             }
             FilterCommands::Reset => {
                 debug!("Resetting patterns");
-                config.filters = Config::default().filters;
-                config.store()?;
+                println!("Do you want to reset the filter configuration? [y/N]");
+                let mut buf = String::new();
+                std::io::stdin().read_line(&mut buf)?;
+                if buf.trim().to_lowercase() == "y" {
+                    config.filters = Config::default().filters;
+                    config.store()?;
+                }
             }
         }
         Ok(())
