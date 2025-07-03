@@ -12,7 +12,6 @@ version = "0.1.0"
 edition = "2024"
 authors = ["HafiTheCat <ufq0x4vbq@mozmail.com>"]
 repository = "https://github.com/hafithecat/dev-cleaner"
-issues = "https://github.com/hafithecat/dev-cleaner/issues"
 
 
 [workspace.dependencies]
