@@ -157,7 +157,7 @@ impl ConfigCommands {
                 }
             }
             ConfigCommands::List => {
-                println!("Listing all folder patterns");
+                println!("{}", &config);
             }
             ConfigCommands::Reset => {
                 println!("Resetting all folder patterns");
