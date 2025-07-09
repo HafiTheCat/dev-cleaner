@@ -3,7 +3,10 @@ use log::{LevelFilter, debug};
 use owo_colors::OwoColorize;
 use std::path::PathBuf;
 
-use dev_cleaner_core::config::{self, Config};
+use dev_cleaner_core::{
+    config::{self, Config},
+    folderscan::{remove_folders, scan_folders},
+};
 
 #[derive(Debug, Parser)]
 #[clap(author, version, about, long_about = None,
@@ -13,7 +16,7 @@ use dev_cleaner_core::config::{self, Config};
 pub struct DevCleanerCli {
     /// Optional path argument
     #[arg(value_hint = clap::ValueHint::DirPath)]
-    #[arg(short, long, conflicts_with = "gui", default_value = None)]
+    #[arg(index = 1)]
     pub path: Option<PathBuf>,
 
     /// Set log level (e.g., DEBUG, INFO, WARN, ERROR)
@@ -75,9 +78,55 @@ impl DevCleanerCli {
     }
     /// Process the command
     pub fn process(&self, config: &mut config::Config) -> Result<(), Box<dyn std::error::Error>> {
+        if self.path.is_none() {
+            Self::show_about()?;
+            return Ok(());
+        }
+
+        if let Some(path_buf) = &self.path {
+            // FIXME: target dir passing bodge
+            let found_folders = scan_folders(
+                path_buf,
+                config
+                    .filters
+                    .iter()
+                    .map(|f| f.as_str())
+                    .collect::<Vec<_>>()
+                    .as_slice(),
+            );
+
+            let items = found_folders
+                .iter()
+                .map(|f| format!("{}", f.display()))
+                .collect::<Vec<_>>();
+
+            let selected =
+                dialoguer::MultiSelect::with_theme(&dialoguer::theme::ColorfulTheme::default())
+                    .with_prompt(format!("Found {} folders to clean", found_folders.len()))
+                    .items(items.as_slice())
+                    .report(true)
+                    .interact()?;
+
+            let selected_folders = selected
+                .iter()
+                .map(|i| found_folders[*i].clone())
+                .collect::<Vec<_>>();
+
+            let (removed, errored) = remove_folders(selected_folders);
+
+            println!("Removed {} folders", removed.len());
+            for f in removed {
+                println!("\t- {}", f.display().green());
+            }
+            println!("Errored {} folders", errored.len());
+            for f in errored {
+                println!("\t- {}", f.display().red());
+            }
+        }
+
         let _ = match self.command.as_ref() {
             Some(cmd) => cmd.process(config),
-            None => Self::show_about(),
+            None => Ok(()),
         };
         Ok(())
     }
