@@ -7,6 +7,8 @@ repository.workspace = true
 
 [dependencies]
 serde = { version = "1.0.188", features = ["derive"] }
+hashbrown = "0.15.4"
+ahash = "0.8.12"
 confy = "1.0.0"
 
 owo-colors.workspace = true
