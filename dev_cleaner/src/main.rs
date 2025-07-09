@@ -11,7 +11,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     
     if cli.gui {
-        DevCleanerGui::new(cli.path.clone()).run()?
+        DevCleanerGui::new(cli.path.clone()).run()?;
+        return Ok(());
     }
 
     cli.process(&mut config)?;
