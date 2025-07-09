@@ -1,5 +1,7 @@
 pub mod config;
 pub mod filters;
+pub mod utils;
+
 #[macro_use]
 pub mod macros;
 
